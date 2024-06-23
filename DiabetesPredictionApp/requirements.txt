@@ -1,0 +1,9 @@
+pandas==2.2.2
+seaborn==0.13.2
+Flask==3.0.3
+numpy==1.26.4
+matplotlib==3.8.4
+gunicorn==22.0.0
+waitress~=3.0.0
+scikit-learn~=1.4.2
+imblearn~=0.0

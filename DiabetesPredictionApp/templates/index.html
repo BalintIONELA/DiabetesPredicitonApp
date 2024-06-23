@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>ML API</title>
+  <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Hind:300' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link type="text/css" rel="stylesheet" href="style.css"/>
+  <style>
+    .error-tooltip {
+      display: none;
+      position: absolute;
+      background-color: #f44336;
+      color: #fff;
+      padding: 5px;
+      border-radius: 5px;
+      font-size: 12px;
+      z-index: 1;
+    }
+    .input-container {
+      position: relative;
+      margin-bottom: 10px;
+    }
+    input[type="number"], input[type="float"] {
+      margin: 5px 0;
+      padding: 10px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      width: calc(100% - 22px);
+    }
+    .btn {
+      margin-top: 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #8a2be2;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      width: 100%;
+    }
+    .btn:hover {
+      background-color: #4a77d4;
+
+    }
+  </style>
+  <script>
+    function validateInput(input) {
+      if (input.value < 0) {
+        input.nextElementSibling.style.display = 'block';
+        return false;
+      } else {
+        input.nextElementSibling.style.display = 'none';
+        return true;
+      }
+    }
+
+    function validateForm() {
+      var inputs = document.getElementsByTagName('input');
+          for (var i = 0; i < inputs.length; i++) {
+              if (inputs[i].type === 'number' || inputs[i].type === 'float') {
+                  if (inputs[i].value < 0) {
+                      document.getElementById('error-message').innerText = 'All input values must be non-negative.';
+                      return false; // Prevent form submission
+                  }
+              }
+          }
+          return true; // Allow form submission
+    }
+  </script>
+</head>
+
+<body>
+ <div class="login">
+    <h1>Diabetes Prediction</h1>
+
+    <!-- Main Input For Receiving Query to our ML -->
+    <form action="{{ url_for('predict')}}" method="post" onsubmit="return validateForm();">
+      <div class="input-container">
+        <input type="number" name="Pregnancies" placeholder="No of Pregnancies" required="required" oninput="validateInput(this)" />
+        <span class="error-tooltip">Negative values are not allowed.</span>
+      </div>
+      <div class="input-container">
+        <input type="number" name="Glucose" placeholder="Plasma glucose concentration" required="required" oninput="validateInput(this)" />
+        <span class="error-tooltip">Negative values are not allowed.</span>
+      </div>
+      <div class="input-container">
+        <input type="number" name="BloodPressure" placeholder="Blood Pressure" required="required" oninput="validateInput(this)" />
+        <span class="error-tooltip">Negative values are not allowed.</span>
+      </div>
+      <div class="input-container">
+        <input type="number" name="SkinThickness" placeholder="Triceps skin fold thickness (mm)" required="required" oninput="validateInput(this)" />
+        <span class="error-tooltip">Negative values are not allowed.</span>
+      </div>
+      <div class="input-container">
+        <input type="number" name="Insulin" placeholder="Insulin" required="required" oninput="validateInput(this)" />
+        <span class="error-tooltip">Negative values are not allowed.</span>
+      </div>
+      <div class="input-container">
+        <input type="number" step="any" name="BMI" placeholder="Body Mass Index" required="required" oninput="validateInput(this)" />
+        <span class="error-tooltip">Negative values are not allowed.</span>
+      </div>
+      <div class="input-container">
+        <input type="number" step="any" name="DiabetesPedigreeFunction" placeholder="Diabetes Pedigree Function" required="required" oninput="validateInput(this)" />
+        <span class="error-tooltip">Negative values are not allowed.</span>
+      </div>
+      <div class="input-container">
+        <input type="number" name="Age" placeholder="Age in Years" required="required" oninput="validateInput(this)" />
+        <span class="error-tooltip">Negative values are not allowed.</span>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block btn-large">Predict</button>
+    </form>
+    <div style="margin-top: -10px;">
+      {% if error_text %}
+        <p style="color: red;">{{ error_text }}</p>
+      {% elif prediction_text %}
+        <p>{{ prediction_text }}</p>
+      {% endif %}
+    </div>
+ </div>
+</body>
+</html>
